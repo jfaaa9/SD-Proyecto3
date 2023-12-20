@@ -1,42 +1,67 @@
 <template>
-  <!-- Botón de cierre de sesión -->
-  <button @click="logout">Cerrar Sesión</button>
-  <div>
-    <h1>WebSocket Chat</h1>
-    <!-- Mostrar el nombre y el rol del usuario si están disponibles -->
-    <p v-if="isConnected && user">
-      Nombre: {{ user.username }}
-      <br>
-      Rol: {{ user.role }}
-    </p>
-    <!-- Mostrar el ID del cliente si está disponible -->
-    <p v-if="isConnected && clientId">Tu ID de cliente: {{ clientId }}</p>
-    <button @click="connect" :disabled="isConnected">Conectar</button>
-    <button @click="disconnect" :disabled="!isConnected">Desconectar</button>
-    <p>
-      {{ status }}
-      <span v-if="isConnected">🟢</span> <!-- Emoji verde cuando está conectado -->
-      <span v-else>🔴</span> <!-- Emoji rojo cuando está desconectado -->
-    </p>
-    <div class="chat-box">
-      <div v-for="(message, index) in messages" :key="index"
-           :class="{'message-enviado': message.type === 'enviado', 
-                    'message-recibido': message.type === 'recibido'}">
-        {{ message.text }}
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">WebSocket Chat</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <button class="btn btn-outline-danger" @click="logout">Cerrar Sesión</button>
+          </li>
+        </ul>
       </div>
     </div>
-    <div class="message-input">
-      <input 
-        type="text" 
-        v-model="messageText" 
-        placeholder="Escribe un mensaje aquí" 
-        :disabled="!isConnected"
-        @keyup.enter="sendMessage"
-      >
-      <button @click="sendMessage" :disabled="!isConnected || !messageText">Enviar</button>
+  </nav>
+
+  <div class="d-flex justify-content-center">
+    <div class="col-md-3">
+      <div class="d-flex flex-column align-items-center">
+        <h1 class="text-center">WebSocket Chat</h1>
+        <div class="user-info text-center"> 
+          <!-- Mostrar el nombre y el rol del usuario si están disponibles -->
+          <p v-if="isConnected && user">
+            Nombre: {{ user.username }}
+            <br>
+            Rol: {{ user.role }}
+          </p>
+          <!-- Mostrar el ID del cliente si está disponible -->
+          <p v-if="isConnected && clientId">Tu ID de cliente: {{ clientId }}</p>
+        </div>
+        <div>
+          <button :class="['btn', isConnected ? 'btn-outline-secondary' : 'btn-dark']" @click="connect" :disabled="isConnected">Conectar</button>
+          <button :class="['btn', isConnected ? 'btn-dark' : 'btn-outline-secondary']" @click="disconnect" :disabled="!isConnected">Desconectar</button>
+        </div>
+        
+        <p class="text-center">
+          {{ status }}
+          <span v-if="isConnected">🟢</span> <!-- Emoji verde cuando está conectado -->
+          <span v-else>🔴</span> <!-- Emoji rojo cuando está desconectado -->
+        </p>
+      </div>
+
+      <div class="chat-box" style="max-height: 300px; overflow-y: auto;">
+        <div v-for="(message, index) in messages" :key="index"
+            :class="{'message-enviado': message.type === 'enviado', 
+                      'message-recibido': message.type === 'recibido'}">
+          {{ message.text }}
+        </div>
+      </div>
+      <div class="message-input">
+        <input 
+          type="text" 
+          v-model="messageText" 
+          placeholder="Escribe un mensaje aquí" 
+          :disabled="!isConnected"
+          @keyup.enter="sendMessage"
+        >
+        <button @click="sendMessage" :disabled="!isConnected || !messageText">Enviar</button>
+      </div>
     </div>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -104,6 +129,13 @@ export default {
 </script>
 
 <style>
+
+.user-info{
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  height: 100px;
+}
+
 .chat-box {
   display: flex;
   flex-direction: column;
