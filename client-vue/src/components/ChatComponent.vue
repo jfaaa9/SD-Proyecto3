@@ -25,6 +25,8 @@
             Nombre: {{ user.username }}
             <br>
             Rol: {{ user.role }}
+            <br>
+            ID: {{ user.id }}
           </p>
           <!-- Mostrar el ID del cliente si está disponible -->
           <p v-if="isConnected && clientId">Tu ID de cliente: {{ clientId }}</p>
@@ -41,7 +43,7 @@
         </p>
       </div>
 
-      <div class="chat-box" style="max-height: 300px; overflow-y: auto;">
+      <div class="chat-box" ref="chatBox" style="max-height: 300px; overflow-y: auto;">
         <div v-for="(message, index) in messages" :key="index"
             :class="{'message-enviado': message.type === 'enviado', 
                       'message-recibido': message.type === 'recibido'}">
@@ -64,6 +66,9 @@
 
 
 <script>
+
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -87,10 +92,11 @@ export default {
   methods: {
     connect() {
       this.ws = new WebSocket("ws://localhost:8080/ws"); // Asegúrate de usar la URL correcta
-
+      
       this.ws.onopen = () => {
         this.status = "Conectado";
         this.isConnected = true;
+        this.fetchChatHistory();
       };
 
       this.ws.onmessage = (event) => {
@@ -102,6 +108,35 @@ export default {
         this.isConnected = false;
       };
     },
+    // Manetener el chat hasta abajo (para ver los ultimos mensajes)
+    scrollToBottom() {
+      const chatBox = this.$refs.chatBox;
+      if (chatBox) {
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+    },
+    fetchChatHistory() {
+      axios.get('http://localhost:8081/messages')
+        .then(response => {
+          console.log("Mensajes recibidos:", response.data);
+          // Asegúrate de que los mensajes se ordenen por timestamp
+          const sortedMessages = response.data.sort((a, b) => {
+            return new Date(a.timestamp) - new Date(b.timestamp);
+          });
+          
+          // Limpiar el array de mensajes antes de agregar nuevos
+          this.messages = [];
+
+          this.messages = sortedMessages.map(msg => ({
+            type: 'recibido',
+            text: msg.content,
+            timestamp: msg.timestamp // Guardar el timestamp también, por si lo necesitas luego
+          }));
+        })
+        .catch(error => {
+          console.error('Error al cargar el historial de chat:', error);
+        });
+    },
     disconnect() {
       this.ws.close();
     },
@@ -109,9 +144,16 @@ export default {
       if (!this.messageText.trim()) {
         return; // No enviar si el mensaje está vacío o solo tiene espacios en blanco
       }
+
       this.ws.send(this.messageText);
       this.messages.push({ type: 'enviado', text: this.messageText });
       this.messageText = ''; // Limpiar el campo después de enviar
+
+      // asegurará que el desplazamiento hacia abajo se realice después de que el mensaje se haya añadido y renderizado en el DOM
+      this.$nextTick(() => {
+        this.scrollToBottom();
+      });
+
     },
     handleIncomingMessage(message) {
       if (message.startsWith("Tu ID de cliente es: ")) {

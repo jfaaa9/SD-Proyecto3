@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Document("messages")
-@NoArgsConstructor
+//@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
@@ -22,6 +22,10 @@ public class Message {
     private String sender; // Quién envía el mensaje
     private String content; // Contenido del mensaje
     private LocalDateTime timestamp; // Hora de envío del mensaje
+
+    public Message() {
+        this.timestamp = LocalDateTime.now(); // Establecer el timestamp al momento actual
+    }
 
     @Override
     public String toString() {
