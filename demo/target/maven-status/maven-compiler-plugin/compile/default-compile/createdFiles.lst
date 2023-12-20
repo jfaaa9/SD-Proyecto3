@@ -1,0 +1,15 @@
+com/example/repository/UserRepository.class
+com/example/controller/GroceryItemController.class
+com/example/model/Message.class
+com/example/controller/MessageController.class
+com/example/service/UserService.class
+com/example/repository/ItemRepository.class
+com/example/service/MessageService.class
+com/example/service/GroceryItemService.class
+com/example/model/User.class
+com/example/repository/MessageRepository.class
+com/example/MongoDbSpringBootApplication.class
+com/example/controller/UserController.class
+com/example/config/CorsConfig.class
+com/example/dto/LoginCredentials.class
+com/example/model/GroceryItem.class

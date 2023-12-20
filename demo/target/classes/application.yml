@@ -1,0 +1,8 @@
+#server:
+#  port: 8081
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://jona2:admin@sd-proyecto-3.bwui1gq.mongodb.net/?retryWrites=true&w=majority
+      database: chatApp

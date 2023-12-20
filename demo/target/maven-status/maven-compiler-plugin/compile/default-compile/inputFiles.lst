@@ -1,0 +1,15 @@
+/Users/jonathanfalcon/Documents/GitHub/SD-Proyecto3/demo/src/main/java/com/example/controller/UserController.java
+/Users/jonathanfalcon/Documents/GitHub/SD-Proyecto3/demo/src/main/java/com/example/service/MessageService.java
+/Users/jonathanfalcon/Documents/GitHub/SD-Proyecto3/demo/src/main/java/com/example/model/Message.java
+/Users/jonathanfalcon/Documents/GitHub/SD-Proyecto3/demo/src/main/java/com/example/repository/MessageRepository.java
+/Users/jonathanfalcon/Documents/GitHub/SD-Proyecto3/demo/src/main/java/com/example/dto/LoginCredentials.java
+/Users/jonathanfalcon/Documents/GitHub/SD-Proyecto3/demo/src/main/java/com/example/MongoDbSpringBootApplication.java
+/Users/jonathanfalcon/Documents/GitHub/SD-Proyecto3/demo/src/main/java/com/example/repository/ItemRepository.java
+/Users/jonathanfalcon/Documents/GitHub/SD-Proyecto3/demo/src/main/java/com/example/config/CorsConfig.java
+/Users/jonathanfalcon/Documents/GitHub/SD-Proyecto3/demo/src/main/java/com/example/model/GroceryItem.java
+/Users/jonathanfalcon/Documents/GitHub/SD-Proyecto3/demo/src/main/java/com/example/controller/GroceryItemController.java
+/Users/jonathanfalcon/Documents/GitHub/SD-Proyecto3/demo/src/main/java/com/example/model/User.java
+/Users/jonathanfalcon/Documents/GitHub/SD-Proyecto3/demo/src/main/java/com/example/controller/MessageController.java
+/Users/jonathanfalcon/Documents/GitHub/SD-Proyecto3/demo/src/main/java/com/example/repository/UserRepository.java
+/Users/jonathanfalcon/Documents/GitHub/SD-Proyecto3/demo/src/main/java/com/example/service/UserService.java
+/Users/jonathanfalcon/Documents/GitHub/SD-Proyecto3/demo/src/main/java/com/example/service/GroceryItemService.java
