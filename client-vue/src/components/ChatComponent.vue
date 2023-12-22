@@ -118,19 +118,13 @@ export default {
     fetchChatHistory() {
       axios.get('http://localhost:8081/messages')
         .then(response => {
-          console.log("Mensajes recibidos:", response.data);
-          // Asegúrate de que los mensajes se ordenen por timestamp
-          const sortedMessages = response.data.sort((a, b) => {
+          this.messages = response.data.sort((a, b) => {
             return new Date(a.timestamp) - new Date(b.timestamp);
-          });
-          
-          // Limpiar el array de mensajes antes de agregar nuevos
-          this.messages = [];
-
-          this.messages = sortedMessages.map(msg => ({
-            type: 'recibido',
+          }).map(msg => ({
+            type: msg.sender === this.user.id ? 'enviado' : 'recibido', // Comparar sender con user.id
             text: msg.content,
-            timestamp: msg.timestamp // Guardar el timestamp también, por si lo necesitas luego
+            timestamp: msg.timestamp,
+            role: msg.role
           }));
         })
         .catch(error => {
@@ -144,8 +138,11 @@ export default {
       if (!this.messageText.trim()) {
         return; // No enviar si el mensaje está vacío o solo tiene espacios en blanco
       }
+      // Crear un array con el ID del usuario y el mensaje
+      const messageArray = [this.user.id, this.messageText, this.user.username];
 
-      this.ws.send(this.messageText);
+      // Convertir el array a una cadena JSON y enviarlo
+      this.ws.send(JSON.stringify(messageArray));
       this.messages.push({ type: 'enviado', text: this.messageText });
       this.messageText = ''; // Limpiar el campo después de enviar
 
@@ -171,6 +168,16 @@ export default {
 </script>
 
 <style>
+
+.message-enviado {
+  text-align: right;
+
+}
+
+.message-recibido {
+  text-align: left;
+
+}
 
 .user-info{
   margin-top: 1.5rem;

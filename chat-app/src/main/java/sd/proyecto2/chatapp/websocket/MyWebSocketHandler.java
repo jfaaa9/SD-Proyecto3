@@ -9,6 +9,10 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.util.List;
+
 import sd.proyecto2.chatapp.websocket.dto.MessageDto;
 
 public class MyWebSocketHandler extends TextWebSocketHandler {
@@ -31,18 +35,36 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     */
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        // Retransmitir el mensaje a todas las sesiones activas
+        
+        // Deserializar la cadena JSON a un array
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> messageData = mapper.readValue(message.getPayload(), new TypeReference<List<String>>(){});
+
+        // Suponiendo que el array tiene dos elementos: [userId, messageText]
+        String userId = messageData.get(0);
+        String messageText = messageData.get(1);
+        String userName = messageData.get(2);
+
+        // Crear un nuevo TextMessage con solo el texto del mensaje
+        String formattedMessage = userName + ": " + messageText;
+        TextMessage textMessageToSend = new TextMessage(formattedMessage);
+
         for (WebSocketSession webSocketSession : sessions) {
             if (webSocketSession.isOpen() && !session.getId().equals(webSocketSession.getId())) {
-                webSocketSession.sendMessage(message);
+                webSocketSession.sendMessage(textMessageToSend);
             }
-            // Imprimir el mensaje recibido y retransmitido en la consola del servidor
-            System.out.println("Mensaje de " + session.getId() + ": " + message.getPayload());
-            //System.out.println("Mensaje retransmitido a " + webSocketSession.getId() + ": " + message.getPayload());
-
-            MessageDto messageDto = new MessageDto(session.getId(), message.getPayload());
-            restTemplate.postForObject(apiUrl, messageDto, MessageDto.class);
+            // Imprimir el mensaje retransmitido en la consola del servidor
+            System.out.println("Mensaje retransmitido a " + webSocketSession.getId() + ": " + message.getPayload());
         }
+
+        // Guardar el mensaje en la base de datos solo una vez
+        //MessageDto messageDto = new MessageDto(session.getId(), message.getPayload());
+        MessageDto messageDto = new MessageDto(userId, messageText);
+        restTemplate.postForObject(apiUrl, messageDto, MessageDto.class);
+
+        // Imprimir el mensaje recibido en la consola del servidor
+        //System.out.println("Mensaje de " + session.getId() + ": " + message.getPayload());
+        System.out.println("Mensaje de " + userId + ": " + messageText);
     }
     
     @Override
