@@ -91,7 +91,9 @@ export default {
   },
   methods: {
     connect() {
-      this.ws = new WebSocket("ws://localhost:8080/ws"); // Asegúrate de usar la URL correcta
+      //this.ws = new WebSocket("ws://localhost:8080/ws"); // Asegúrate de usar la URL correcta
+      //this.ws = new WebSocket("ws://serverws-service:8080/ws");
+      this.ws = new WebSocket("ws://34.176.149.242:8080/ws");
       
       this.ws.onopen = () => {
         this.status = "Conectado";
@@ -116,7 +118,8 @@ export default {
       }
     },
     fetchChatHistory() {
-      axios.get('http://localhost:8081/messages')
+      //axios.get('http://localhost:8081/messages')
+      axios.get('http://34.176.210.55:8081/messages')
         .then(response => {
           this.messages = response.data.sort((a, b) => {
             return new Date(a.timestamp) - new Date(b.timestamp);

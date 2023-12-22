@@ -40,7 +40,9 @@ export default {
   methods: {
     login() {
       axios
-        .post("http://localhost:8081/login", {
+        //.post("http://localhost:8081/login", {
+        //.post("http://api:8081/login", {
+        .post("http://34.176.210.55:8081/login", {
           username: this.username,
           password: this.password,
         })

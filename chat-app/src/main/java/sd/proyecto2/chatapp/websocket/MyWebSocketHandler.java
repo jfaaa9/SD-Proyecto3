@@ -19,8 +19,10 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     private Set<WebSocketSession> sessions = new CopyOnWriteArraySet<>();
     private RestTemplate restTemplate = new RestTemplate();
-    private final String apiUrl = "http://localhost:8081/messages"; // URL de tu API REST
-    
+    //private final String apiUrl = "http://localhost:8081/messages"; // URL de tu API REST
+    //private final String apiUrl = "http://api:8081/messages";
+    private final String apiUrl = "http://34.176.210.55:8081/messages";
+
     /* 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
